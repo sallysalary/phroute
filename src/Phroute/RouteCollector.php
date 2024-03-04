@@ -18,7 +18,7 @@ class RouteCollector implements RouteDataProviderInterface {
     /**
      *
      */
-    const APPROX_CHUNK_SIZE = 10;
+    const APPROX_CHUNK_SIZE = 1;
 
     /**
      * @var RouteParser
@@ -111,7 +111,7 @@ class RouteCollector implements RouteDataProviderInterface {
      * @return $this
      */
     public function addRoute($httpMethod, $route, $handler, array $filters = []) {
-        
+
         if(is_array($route))
         {
             list($route, $name) = $route;
@@ -120,18 +120,18 @@ class RouteCollector implements RouteDataProviderInterface {
         $route = $this->addPrefix($this->trim($route));
 
         list($routeData, $reverseData) = $this->routeParser->parse($route);
-        
+
         if(isset($name))
         {
             $this->reverse[$name] = $reverseData;
         }
-        
+
         $filters = array_merge_recursive($this->globalFilters, $filters);
 
-        isset($routeData[1]) ? 
+        isset($routeData[1]) ?
             $this->addVariableRoute($httpMethod, $routeData, $handler, $filters) :
             $this->addStaticRoute($httpMethod, $routeData, $handler, $filters);
-        
+
         return $this;
     }
 
@@ -333,12 +333,12 @@ class RouteCollector implements RouteDataProviderInterface {
                     }
 
                     $this->addRoute($valid, $route . $sep . $methodName . $params, [$classname, $method->name], $filters);
-                    
+
                     break;
                 }
             }
         }
-        
+
         return $this;
     }
 
